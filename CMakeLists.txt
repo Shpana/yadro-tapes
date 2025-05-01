@@ -3,4 +3,7 @@ project(yadro_tapes)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(yadro_tapes src/main.cpp)
+add_executable(yadro_tapes src/main.cpp
+        src/tapes/tape.hpp
+        src/tapes/file_based_tape.hpp
+        src/tapes/file_based_tape.cpp)
