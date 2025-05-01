@@ -1,8 +1,9 @@
+#include "algorithms/bubble_sort_algorithm.hpp"
 #include "tapes/file_based_tape.hpp"
 
 int main() {
-  FileBasedTapeSpec spec = {};
-  FileBasedTape tape = FileBasedTape::create(spec, "C:/Dev/");
-  tape.move(Tape::Direction::left);
-  return 0;
+  auto algorithm = BubbleSortAlgorithm(
+      std::make_unique<FileBasedTape>("C:/Dev/input.txt"),
+      std::make_unique<FileBasedTape>("C:/Dev/output.txt"));
+  algorithm.run();
 }

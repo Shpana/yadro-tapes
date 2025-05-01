@@ -1,29 +1,27 @@
-#pragma once
+#ifndef YADRO_TAPES_FILE_BASED_TAPE_HPP
+#define YADRO_TAPES_FILE_BASED_TAPE_HPP
 
 #include "tape.hpp"
-#include <chrono>
+
 #include <filesystem>
+#include <fstream>
 
-using namespace std::chrono_literals;
-
-struct FileBasedTapeSpec {
-  std::chrono::milliseconds read_delay = 0ms;
-  std::chrono::milliseconds write_delay = 0ms;
-  std::chrono::milliseconds move_delay = 0ms;
-  std::chrono::milliseconds jump_delay = 0ms;
-};
-
-class FileBasedTape : Tape {
+class FileBasedTape : public Tape {
 public:
-  static FileBasedTape create(const FileBasedTapeSpec &spec, const std::filesystem::path &path);
-  int read() override;
-  void write(int value) override;
+  explicit FileBasedTape(const std::filesystem::path &path);
+  ~FileBasedTape() override;
+
+  int32_t read() override;
+  void write(int32_t value) override;
   void move(Direction direction) override;
-  void jump(size_t position) override;
+  bool can_move(Direction direction) override;
+  size_t get_size() const override;
 
 private:
-  FileBasedTape();
+  std::fstream _file;
+  size_t _file_size = 0;
 
-private:
-  size_t _head_position = 0;
+  int64_t _head_position = 0;
 };
+
+#endif// YADRO_TAPES_FILE_BASED_TAPE_HPP
