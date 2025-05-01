@@ -8,7 +8,7 @@
 
 class FileBasedTapeStorage : public TapeStorage {
 public:
-  FileBasedTapeStorage(const std::filesystem::path &path);
+  FileBasedTapeStorage(const std::filesystem::path &path, size_t tape_size);
   ~FileBasedTapeStorage() override;
 
   Data read() override;
@@ -20,7 +20,7 @@ public:
 
 private:
   std::fstream _tape_file;
-  size_t _tape_size = 0;
+  size_t _tape_size;
   size_t _head_position = 0;
 };
 

@@ -3,19 +3,18 @@
 
 #include "algorithm.hpp"
 
-class CopyAlgorithm : public Algorithm {
+class CopyAlgorithm : public Algorithm<specs::EmptySpec> {
 public:
-  CopyAlgorithm(std::unique_ptr<TapeStorage> &&input_tape,
-                std::unique_ptr<TapeStorage> &&output_tape)
-      : Algorithm(std::move(input_tape), std::move(output_tape)) {}
+  using Algorithm<specs::EmptySpec>::Algorithm;
 
   void run() override {
-    auto size = _input_tape->get_size();
-    do {
+    while (_input_tape->get_head_position() < _input_tape->get_size()) {
       _output_tape->write(_input_tape->read());
+      if (_input_tape->get_head_position() == _input_tape->get_size() - 1)
+        break;
       _input_tape->move_forward();
       _output_tape->move_forward();
-    } while (_input_tape->get_head_position() < size);
+    }
   }
 };
 
