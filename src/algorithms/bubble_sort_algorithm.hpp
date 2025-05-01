@@ -2,6 +2,8 @@
 #define YADRO_TAPES_BUBBLE_SORT_ALGORITHM_HPP
 
 #include "algorithm.hpp"
+#include "copy_algorithm.hpp"
+#include "tapes/file_based_tape.hpp"
 
 class BubbleSortAlgorithm : public Algorithm<specs::EmptySpec> {
 public:
@@ -9,35 +11,36 @@ public:
 
   void run() override {
     size_t size = _input_tape->get_size();
-
-    for (size_t i = 0; i < size; ++i) {
-      _output_tape->write(_input_tape->read());
-      if (i == size - 1)
-        break;
-      _input_tape->move_forward();
-      _output_tape->move_forward();
+    {
+      auto temp_tape =
+          std::make_unique<FileBasedTapeStorage>("../tests/tmp/temp.txt", size);
+      CopyAlgorithm(std::move(_input_tape), std::move(temp_tape), {})
+          .run();
     }
-
-    for (size_t i = 0; i < size - 1; ++i) {
-      _reset(_output_tape);
-      for (size_t j = 0; j < size - i - 1; ++j) {
-        auto lhs = _output_tape->read();
-        _output_tape->move_forward();
-        auto rhs = _output_tape->read();
-        if (lhs > rhs) {
-          _output_tape->write(lhs);
-          _output_tape->move_back();
-          _output_tape->write(rhs);
-          _output_tape->move_forward();
+    {
+      auto temp_tape =
+          std::make_unique<FileBasedTapeStorage>("../tests/tmp/temp.txt", size);
+      for (size_t i = 0; i < size - 1; ++i) {
+        temp_tape->reset();
+        for (size_t j = 0; j < size - i - 1; ++j) {
+          auto lhs = temp_tape->read();
+          temp_tape->move_forward();
+          auto rhs = temp_tape->read();
+          if (lhs > rhs) {
+            temp_tape->write(lhs);
+            temp_tape->move_back();
+            temp_tape->write(rhs);
+            temp_tape->move_forward();
+          }
         }
       }
     }
-  }
-
-private:
-  void _reset(const std::unique_ptr<TapeStorage>& tape) {
-    while (tape->get_head_position() > 0)
-      tape->move_back();
+    {
+      auto temp_tape =
+          std::make_unique<FileBasedTapeStorage>("../tests/tmp/temp.txt", size);
+      CopyAlgorithm(std::move(temp_tape), std::move(_output_tape), {})
+          .run();
+    }
   }
 };
 
