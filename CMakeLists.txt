@@ -14,4 +14,5 @@ add_executable(yadro_tapes src/main.cpp
         src/algorithms/block_sort_algorithm.hpp
         src/algorithms/bubble_sort_algorithm.hpp
         src/algorithms/print_algorithm.hpp
+        src/tapes/dummy_tape.hpp
 )
