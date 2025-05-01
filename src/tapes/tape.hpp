@@ -3,21 +3,19 @@
 
 #include <cstdint>
 
-class Tape {
+class TapeStorage {
 public:
-  enum class Direction : int {
-    Left = -1,
-    Right = 1
-  };
+  using Data = int32_t;
 
 public:
-  virtual ~Tape() = default;
+  virtual ~TapeStorage() = default;
 
-  virtual int32_t read() = 0;
-  virtual void write(int32_t value) = 0;
-  virtual void move(Direction direction) = 0;
-  virtual bool can_move(Direction direction) = 0;
+  virtual Data read() = 0;
+  virtual void write(Data value) = 0;
+  virtual void move_forward() = 0;
+  virtual void move_back() = 0;
   [[nodiscard]] virtual size_t get_size() const = 0;
+  [[nodiscard]] virtual size_t get_head_position() const = 0;
 };
 
 #endif// YADRO_TAPES_TAPE_HPP

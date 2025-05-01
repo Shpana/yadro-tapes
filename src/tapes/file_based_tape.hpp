@@ -6,22 +6,22 @@
 #include <filesystem>
 #include <fstream>
 
-class FileBasedTape : public Tape {
+class FileBasedTapeStorage : public TapeStorage {
 public:
-  explicit FileBasedTape(const std::filesystem::path &path);
-  ~FileBasedTape() override;
+  FileBasedTapeStorage(const std::filesystem::path &path);
+  ~FileBasedTapeStorage() override;
 
-  int32_t read() override;
-  void write(int32_t value) override;
-  void move(Direction direction) override;
-  bool can_move(Direction direction) override;
-  size_t get_size() const override;
+  Data read() override;
+  void write(Data value) override;
+  void move_forward() override;
+  void move_back() override;
+  [[nodiscard]] size_t get_size() const override { return _tape_size; }
+  [[nodiscard]] size_t get_head_position() const override { return _head_position; }
 
 private:
-  std::fstream _file;
-  size_t _file_size = 0;
-
-  int64_t _head_position = 0;
+  std::fstream _tape_file;
+  size_t _tape_size = 0;
+  size_t _head_position = 0;
 };
 
 #endif// YADRO_TAPES_FILE_BASED_TAPE_HPP
