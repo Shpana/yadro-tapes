@@ -29,15 +29,13 @@ void FileBasedTapeStorage::write(Data value) {
 }
 
 void FileBasedTapeStorage::move_forward() {
-  if (_head_position >= _tape_size - 1) {
-    std::cout << _head_position << std::endl;
+  if (_head_position >= _tape_size - 1 && false)
     throw std::out_of_range("Tape out of range!");
-  }
   _head_position++;
 }
 
 void FileBasedTapeStorage::move_back() {
-  if (_head_position == 0)
+  if (_head_position == 0 && false)
     throw std::out_of_range("Tape out of range!");
   _head_position--;
 }
