@@ -2,19 +2,21 @@
 
 #include <iostream>
 
-FileBasedTapeStorage::FileBasedTapeStorage(
+FileBasedTape::FileBasedTape(
     const std::filesystem::path& path, size_t tape_size)
-    : _tape_size(tape_size) {
+    : _tape_size(tape_size), _head_position(0) {
   _tape_file.open(path, std::ios::in | std::ios::out | std::ios::binary);
   if (!_tape_file.is_open())
     throw std::runtime_error("Unable to open tape file!");
 }
 
-FileBasedTapeStorage::~FileBasedTapeStorage() {
+FileBasedTape::~FileBasedTape() {
   _tape_file.close();
 }
 
-TapeStorage::Data FileBasedTapeStorage::read() {
+Tape::Data FileBasedTape::read() {
+  if (_head_position > _tape_size)
+    throw std::out_of_range("Tape out of range!");
   Data value;
   _tape_file.seekg(
       static_cast<int64_t>(_head_position * sizeof(Data)), std::ios::beg);
@@ -22,20 +24,18 @@ TapeStorage::Data FileBasedTapeStorage::read() {
   return value;
 }
 
-void FileBasedTapeStorage::write(Data value) {
+void FileBasedTape::write(Data value) {
+  if (_head_position > _tape_size)
+    throw std::out_of_range("Tape out of range!");
   _tape_file.seekp(
       static_cast<int64_t>(_head_position * sizeof(Data)), std::ios::beg);
   _tape_file.write(reinterpret_cast<char*>(&value), sizeof(Data));
 }
 
-void FileBasedTapeStorage::move_forward() {
-  if (_head_position >= _tape_size - 1 && false)
-    throw std::out_of_range("Tape out of range!");
+void FileBasedTape::move_forward() {
   _head_position++;
 }
 
-void FileBasedTapeStorage::move_back() {
-  if (_head_position == 0 && false)
-    throw std::out_of_range("Tape out of range!");
+void FileBasedTape::move_back() {
   _head_position--;
 }

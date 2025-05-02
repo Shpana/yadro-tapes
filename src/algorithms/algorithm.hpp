@@ -8,8 +8,8 @@
 template<class TSpec>
 class Algorithm {
 public:
-  Algorithm(std::unique_ptr<TapeStorage>&& input_tape,
-            std::unique_ptr<TapeStorage>&& output_tape,
+  Algorithm(std::unique_ptr<Tape>&& input_tape,
+            std::unique_ptr<Tape>&& output_tape,
             const TSpec& spec)
       : _input_tape(std::move(input_tape)),
         _output_tape(std::move(output_tape)),
@@ -17,8 +17,8 @@ public:
   virtual void run() = 0;
 
 protected:
-  std::unique_ptr<TapeStorage> _input_tape;
-  std::unique_ptr<TapeStorage> _output_tape;
+  std::unique_ptr<Tape> _input_tape;
+  std::unique_ptr<Tape> _output_tape;
   const TSpec& _spec;
 };
 

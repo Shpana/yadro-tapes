@@ -2,8 +2,7 @@
 #define YADRO_TAPES_BUBBLE_SORT_ALGORITHM_HPP
 
 #include "algorithm.hpp"
-#include "copy_algorithm.hpp"
-#include "tapes/file_based_tape.hpp"
+#include "tapes/tape_extends.hpp"
 
 class BubbleSortAlgorithm : public Algorithm<specs::EmptySpec> {
 public:
@@ -12,24 +11,18 @@ public:
   void run() override {
     size_t size = _input_tape->get_size();
 
-    while (_input_tape->get_head_position() < size) {
-      _output_tape->write(_input_tape->read());
-      if (_input_tape->get_head_position() == size - 1)
-        break;
-      _input_tape->move_forward();
-      _output_tape->move_forward();
-    }
+    copy(_input_tape, _output_tape);
 
     for (size_t i = 0; i < size - 1; ++i) {
-      _output_tape->reset();
+      reset(_output_tape);
       for (size_t j = 0; j < size - i - 1; ++j) {
-        auto lhs = _output_tape->read();
+        auto u = _output_tape->read();
         _output_tape->move_forward();
-        auto rhs = _output_tape->read();
-        if (lhs > rhs) {
-          _output_tape->write(lhs);
+        auto v = _output_tape->read();
+        if (u > v) {
+          _output_tape->write(u);
           _output_tape->move_back();
-          _output_tape->write(rhs);
+          _output_tape->write(v);
           _output_tape->move_forward();
         }
       }

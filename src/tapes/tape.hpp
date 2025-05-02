@@ -3,12 +3,12 @@
 
 #include <cstdint>
 
-class TapeStorage {
+class Tape {
 public:
   using Data = int32_t;
 
 public:
-  virtual ~TapeStorage() = default;
+  virtual ~Tape() = default;
 
   virtual Data read() = 0;
   virtual void write(Data value) = 0;
