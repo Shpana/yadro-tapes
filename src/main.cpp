@@ -1,22 +1,30 @@
-#include "algorithms/bubble_sort_algorithm.hpp"
 #include "algorithms/merge_sort_algorithm.hpp"
 #include "tapes/file_based_tape.hpp"
 
 #include <filesystem>
 #include <iostream>
 
-int main() {
-  size_t size = 20, memory_limit = 4;
+int main(int argc, char* argv[]) {
+  if (argc != 5) {
+    std::cerr << "Usage: " << argv[0]
+              << " <input_file> <output_file> <tape_size> <memory_limit>" << std::endl;
+    return 1;
+  }
 
-  std::filesystem::path root_path = "../tests/";
+  std::filesystem::path input_file = argv[1];
+  std::filesystem::path output_file = argv[2];
+  size_t tape_size = std::stoul(argv[3]);
+  size_t memory_limit = std::stoul(argv[4]);
   {
+    std::filesystem::path root = "../tests/";
+
     auto input_tape =
-        std::make_unique<FileBasedTape>(root_path / "input.txt", size);
+        std::make_unique<FileBasedTape>(input_file, tape_size);
     auto output_tape =
-        std::make_unique<FileBasedTape>(root_path / "output.txt", size);
+        std::make_unique<FileBasedTape>(output_file, tape_size);
     std::array<std::unique_ptr<Tape>, 2> extra_tapes = {
-        std::make_unique<FileBasedTape>(root_path / "tmp/1.txt", size),
-        std::make_unique<FileBasedTape>(root_path / "tmp/2.txt", size),
+        std::make_unique<FileBasedTape>(root / "tmp/1.txt", tape_size),
+        std::make_unique<FileBasedTape>(root / "tmp/2.txt", tape_size),
     };
     auto spec = MemoryLimitSpec(memory_limit);
 
@@ -26,8 +34,8 @@ int main() {
   }
   {
     auto output_tape =
-        std::make_unique<FileBasedTape>(root_path / "output.txt", size);
-    for (size_t i = 0; i < size; ++i) {
+        std::make_unique<FileBasedTape>(output_file, tape_size);
+    for (size_t i = 0; i < tape_size; ++i) {
       std::cout << output_tape->read() << " ";
       output_tape->move_forward();
     }
