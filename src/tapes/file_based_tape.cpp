@@ -1,7 +1,5 @@
 #include "file_based_tape.hpp"
 
-#include <iostream>
-
 FileBasedTape::FileBasedTape(
     const std::filesystem::path& path, size_t tape_size)
     : _tape_size(tape_size), _head_position(0) {

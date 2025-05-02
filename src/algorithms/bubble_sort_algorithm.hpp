@@ -4,9 +4,11 @@
 #include "algorithm.hpp"
 #include "tapes/tape_extends.hpp"
 
-class BubbleSortAlgorithm : public Algorithm<specs::EmptySpec> {
+struct EmptySpec {};
+
+class BubbleSortAlgorithm : public Algorithm<0, EmptySpec> {
 public:
-  using Algorithm<specs::EmptySpec>::Algorithm;
+  using Algorithm<0, EmptySpec>::Algorithm;
 
   void run() override {
     size_t size = _input_tape->get_size();
