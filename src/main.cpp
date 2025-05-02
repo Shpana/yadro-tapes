@@ -16,22 +16,32 @@ int main() {
         std::make_unique<FileBasedTapeStorage>(root_path / "input.txt", n);
     auto output_tape =
         std::make_unique<FileBasedTapeStorage>(root_path / "output.txt", n);
-    auto extra_tape =
+    auto extra_tape1 =
         std::make_unique<FileBasedTapeStorage>(root_path / "tmp/1.txt", n);
+    auto extra_tape2 =
+        std::make_unique<FileBasedTapeStorage>(root_path / "tmp/2.txt", n);
 
-    MergeSort(std::move(input_tape), std::move(output_tape), std::move(extra_tape),
+    MergeSort(std::move(input_tape), std::move(output_tape), std::move(extra_tape1), std::move(extra_tape2),
               memory_limit)
         .run();
   }
   {
-    auto input_tape =
-        std::make_unique<FileBasedTapeStorage>(root_path / "input.txt", n);
-    auto output_tape =
+    auto extra1 =
         std::make_unique<FileBasedTapeStorage>(root_path / "tmp/1.txt", n);
+    auto extra2 =
+        std::make_unique<FileBasedTapeStorage>(root_path / "tmp/2.txt", n);
+    auto input =
+        std::make_unique<FileBasedTapeStorage>(root_path / "input.txt", n);
+    auto output =
+        std::make_unique<FileBasedTapeStorage>(root_path / "output.txt", n);
 
-    PrintAlgorithm(std::move(input_tape), std::make_unique<DummyTapeStorage>(), {})
+    PrintAlgorithm(std::move(extra1), std::make_unique<DummyTapeStorage>(), {})
         .run();
-    PrintAlgorithm(std::move(output_tape), std::make_unique<DummyTapeStorage>(), {})
+    PrintAlgorithm(std::move(extra2), std::make_unique<DummyTapeStorage>(), {})
+        .run();
+    PrintAlgorithm(std::move(input), std::make_unique<DummyTapeStorage>(), {})
+        .run();
+    PrintAlgorithm(std::move(output), std::make_unique<DummyTapeStorage>(), {})
         .run();
   }
 }

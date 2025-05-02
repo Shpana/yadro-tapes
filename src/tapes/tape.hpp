@@ -16,11 +16,6 @@ public:
   virtual void move_back() = 0;
   [[nodiscard]] virtual size_t get_size() const = 0;
   [[nodiscard]] virtual size_t get_head_position() const = 0;
-
-  void reset() {
-    while (get_head_position() > 0)
-      move_back();
-  }
 };
 
 #endif// YADRO_TAPES_TAPE_HPP
