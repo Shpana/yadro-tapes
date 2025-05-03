@@ -10,8 +10,6 @@ struct SleepingWorkloadSpec {
   std::chrono::milliseconds reading_delay{0};
   std::chrono::milliseconds writing_delay{0};
   std::chrono::milliseconds moving_delay{0};
-
-  SleepingWorkloadSpec() = default;
 };
 
 class SleepingWorkload : public Workload {

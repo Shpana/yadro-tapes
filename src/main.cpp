@@ -1,9 +1,15 @@
 #include "algorithms/merge_sort_algorithm.hpp"
 #include "tapes/file_based_tape.hpp"
 #include "tapes/workloads/sleeping_workload.hpp"
+#include "utils/configs.hpp"
 
 #include <filesystem>
 #include <iostream>
+
+namespace {
+  std::filesystem::path tests_path = "../tests";
+  std::filesystem::path configs_path = "../configs";
+}// namespace
 
 int main(int argc, char* argv[]) {
   if (argc != 5) {
@@ -17,17 +23,16 @@ int main(int argc, char* argv[]) {
   size_t tape_size = std::stoul(argv[3]);
   size_t memory_limit = std::stoul(argv[4]);
   {
-    std::filesystem::path root = "../tests/";
-
-    auto workload = std::make_shared<SleepingWorkload>(SleepingWorkloadSpec{});
+    auto workload = std::make_shared<SleepingWorkload>(
+        load_sleeping_workload_spec(configs_path / "workloads.yaml"));
 
     auto input_tape =
         std::make_unique<FileBasedTape>(input_file, tape_size, workload);
     auto output_tape =
         std::make_unique<FileBasedTape>(output_file, tape_size, workload);
     std::array<std::unique_ptr<Tape>, 2> extra_tapes = {
-        std::make_unique<FileBasedTape>(root / "tmp/1.txt", tape_size, workload),
-        std::make_unique<FileBasedTape>(root / "tmp/2.txt", tape_size, workload),
+        std::make_unique<FileBasedTape>(tests_path / "tmp/1.txt", tape_size, workload),
+        std::make_unique<FileBasedTape>(tests_path / "tmp/2.txt", tape_size, workload),
     };
     auto spec = MemoryLimitSpec(memory_limit);
 

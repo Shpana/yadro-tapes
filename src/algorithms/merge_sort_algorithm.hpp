@@ -16,8 +16,9 @@ class MergeSortAlgorithm : public Algorithm<2, MemoryLimitSpec> {
     size_t lhs, rhs;
 
     Segment(size_t _lhs, size_t _rhs)
-      : lhs(_lhs), rhs(_rhs) {}
+        : lhs(_lhs), rhs(_rhs) {}
   };
+
 public:
   using Algorithm<2, MemoryLimitSpec>::Algorithm;
 

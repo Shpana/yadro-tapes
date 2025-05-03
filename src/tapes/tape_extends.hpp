@@ -3,8 +3,8 @@
 
 #include "tape.hpp"
 
-#include <array>
 #include <algorithm>
+#include <array>
 #include <memory>
 #include <vector>
 
