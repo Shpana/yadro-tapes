@@ -18,35 +18,24 @@ int main(int argc, char* argv[]) {
   size_t tape_size = std::stoul(argv[3]);
   size_t memory_limit = std::stoul(argv[4]);
 
-  {
 #ifdef CONFIGS_PATH
-    auto workload = std::make_shared<SleepingWorkload>(
-        load_sleeping_workload_spec(std::filesystem::path(CONFIGS_PATH) / "workloads.yaml"));
+  auto workload = std::make_shared<SleepingWorkload>(
+      load_sleeping_workload_spec(std::filesystem::path(CONFIGS_PATH) / "workloads.yaml"));
 #else
-    auto workload = std::make_shared<SleepingWorkload>(SleepingWorkloadSpec{});
+  auto workload = std::make_shared<SleepingWorkload>(SleepingWorkloadSpec());
 #endif
 
-    auto input_tape =
-        std::make_unique<FileBasedTape>(input_file, tape_size, workload);
-    auto output_tape =
-        std::make_unique<FileBasedTape>(output_file, tape_size, workload);
-    std::array<std::unique_ptr<Tape>, 2> extra_tapes = {
-        create_temp_tape("1.dat", tape_size, workload),
-        create_temp_tape("2.dat", tape_size, workload),
-    };
-    auto spec = MemoryLimitSpec(memory_limit);
+  auto input_tape =
+      std::make_unique<FileBasedTape>(input_file, tape_size, workload);
+  auto output_tape =
+      std::make_unique<FileBasedTape>(output_file, tape_size, workload);
+  std::array<std::unique_ptr<Tape>, 2> extra_tapes = {
+      create_temp_tape("1.dat", tape_size, workload),
+      create_temp_tape("2.dat", tape_size, workload),
+  };
+  auto spec = MemoryLimitSpec(memory_limit);
 
-    MergeSortAlgorithm(
-        std::move(input_tape), std::move(output_tape), extra_tapes, spec)
-        .run();
-  }
-  {
-    auto output_tape =
-        std::make_unique<FileBasedTape>(output_file, tape_size);
-    for (size_t i = 0; i < tape_size; ++i) {
-      std::cout << output_tape->read() << " ";
-      output_tape->move_forward();
-    }
-    std::cout << std::endl;
-  }
+  MergeSortAlgorithm(
+      std::move(input_tape), std::move(output_tape), extra_tapes, spec)
+      .run();
 }

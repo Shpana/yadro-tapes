@@ -4,7 +4,7 @@ namespace {
 #ifdef TMP_PATH
   std::filesystem::path tmp_path(TMP_PATH);
 #endif
-}
+}// namespace
 
 void create_empty_file(const std::filesystem::path& filepath) {
   std::fstream file;

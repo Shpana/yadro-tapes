@@ -35,8 +35,7 @@ TEST(sorting_tests, merge_sort) {
     auto output_tape = create_temp_tape("output.dat", size);
     std::array<std::unique_ptr<Tape>, 2> extra_tapes = {
         create_temp_tape("1.dat", size),
-        create_temp_tape("2.dat", size)
-    };
+        create_temp_tape("2.dat", size)};
     auto specs = MemoryLimitSpec(memory_limit);
 
     MergeSortAlgorithm(std::move(input_tape), std::move(output_tape), extra_tapes, specs)
