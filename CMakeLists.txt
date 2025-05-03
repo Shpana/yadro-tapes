@@ -13,4 +13,6 @@ add_executable(yadro_tapes src/main.cpp
         src/algorithms/bubble_sort_algorithm.hpp
         src/algorithms/merge_sort_algorithm.hpp
         src/tapes/tape_extends.hpp
+        src/tapes/workloads/workload.hpp
+        src/tapes/workloads/sleeping_workload.hpp
 )

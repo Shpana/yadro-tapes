@@ -1,5 +1,6 @@
 #include "algorithms/merge_sort_algorithm.hpp"
 #include "tapes/file_based_tape.hpp"
+#include "tapes/workloads/sleeping_workload.hpp"
 
 #include <filesystem>
 #include <iostream>
@@ -18,13 +19,15 @@ int main(int argc, char* argv[]) {
   {
     std::filesystem::path root = "../tests/";
 
+    auto workload = std::make_shared<SleepingWorkload>(SleepingWorkloadSpec{});
+
     auto input_tape =
-        std::make_unique<FileBasedTape>(input_file, tape_size);
+        std::make_unique<FileBasedTape>(input_file, tape_size, workload);
     auto output_tape =
-        std::make_unique<FileBasedTape>(output_file, tape_size);
+        std::make_unique<FileBasedTape>(output_file, tape_size, workload);
     std::array<std::unique_ptr<Tape>, 2> extra_tapes = {
-        std::make_unique<FileBasedTape>(root / "tmp/1.txt", tape_size),
-        std::make_unique<FileBasedTape>(root / "tmp/2.txt", tape_size),
+        std::make_unique<FileBasedTape>(root / "tmp/1.txt", tape_size, workload),
+        std::make_unique<FileBasedTape>(root / "tmp/2.txt", tape_size, workload),
     };
     auto spec = MemoryLimitSpec(memory_limit);
 
