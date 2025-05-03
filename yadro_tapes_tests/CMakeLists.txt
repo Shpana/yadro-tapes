@@ -14,8 +14,8 @@ target_link_libraries(run_tests_lib
         PUBLIC yadro_tapes_lib
 )
 target_compile_definitions(run_tests_lib
-        PRIVATE STATIC_FILES_PATH="${CMAKE_CURRENT_SOURCE_DIR}/static"
-        PRIVATE TMP_PATH="${CMAKE_SOURCE_DIR}/tmp"
+        PRIVATE STATIC_FILES_PATH="${STATIC_FILES_PATH}"
+        PRIVATE TMP_PATH="${TMP_PATH}"
 )
 
 add_executable(run_tests

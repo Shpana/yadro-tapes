@@ -24,7 +24,7 @@ target_link_libraries(yadro_tapes_lib
         PUBLIC yaml-cpp::yaml-cpp
 )
 target_compile_definitions(yadro_tapes_lib
-        PRIVATE TMP_PATH="${CMAKE_SOURCE_DIR}/tmp"
+        PRIVATE TMP_PATH="${TMP_PATH}"
 )
 
 add_executable(yadro_tapes main.cpp)
@@ -35,5 +35,5 @@ target_link_libraries(yadro_tapes
         PUBLIC yadro_tapes_lib
 )
 target_compile_definitions(yadro_tapes
-        PRIVATE CONFIGS_PATH="${CMAKE_CURRENT_SOURCE_DIR}/configs"
+        PRIVATE CONFIGS_PATH="${CONFIGS_PATH}"
 )
