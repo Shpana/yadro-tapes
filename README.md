@@ -1,6 +1,6 @@
 # yadro-tapes
 
-### Overview
+## Overview
 
 The `Tape` interface was introduced to work with a tape-type device. 
 The `FileBasedTape` class was inherited from it, a device that emulates operation through files.
@@ -14,10 +14,11 @@ The `Algorithm` interface was introduced to interact with sorting algorithms.
 Based on it, two sorting algorithms were implemented: `BubbleSortAlgorithm` and `MergeSortAlgorithm`.
 `BubbleSortAlgorithm` does not use additional tapes, implements a standard algorithm without using additional memory. 
 `MergeSortAlgorithm` uses two additional tapes to store temporary information.
+A detailed description of the implementation of `MergeSortAlgorithm` can be found in the `docs/merge-sort-details.pdf`.
 
 Small tests have been written for `FileBasedTape`, `BubbleSortAlgorithm`, and `MergeSortAlgorithm` using the [GoogleTest](https://github.com/google/googletest) framework.
 
-### Build & Usage 
+## Build & Usage 
 
 CMake is used to build the project. 
 The targets we are interested in are `yadro_tapes` and `run_tests`.
@@ -29,6 +30,7 @@ yadro_tapes <input> <output> <size> <memory_limit>
 Here, `<input>` and `<output>` are understood as input and output files, respectively (**they must exist**); 
 `<size>` is the size of the tapes, respectively, input and output; 
 `<memory_limit>` is memory limits (indicated by the letter M in the original condition).
+The data in the tape files is stored in binary form: each cell consists of 4 bytes (it stores a 32-bit integer).
 
 The `run_tests` target can be launched without additional parameters
 ```shell
@@ -36,4 +38,5 @@ run_tests
 ```
 
 > [!NOTE]
-> The project was built under Ubuntu (using make) and under Windows (using the built-in tools of CLion, which, apparently, uses ninja under the hood). 
+> The project was built on Ubuntu (using make) and on Windows (using the built-in tools of CLion, which, apparently, 
+> uses ninja under the hood). 
