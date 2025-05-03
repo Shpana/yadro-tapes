@@ -4,6 +4,7 @@
 #include "tape.hpp"
 
 #include <array>
+#include <algorithm>
 #include <memory>
 #include <vector>
 
@@ -57,6 +58,23 @@ void copy(
     from->move_forward();
     to->move_forward();
   }
+}
+
+void copy_part(
+    const std::unique_ptr<Tape>& from,
+    const std::unique_ptr<Tape>& to,
+    size_t part_size) {
+  auto buffer = read_many(from, part_size);
+  write_many(to, buffer);
+}
+
+void sort(
+    const std::unique_ptr<Tape>& from,
+    const std::unique_ptr<Tape>& to,
+    size_t block_size) {
+  auto buffer = read_many(from, block_size);
+  std::sort(buffer.begin(), buffer.end());
+  write_many(to, buffer);
 }
 
 #endif// YADRO_TAPES_TAPE_EXTENDS_HPP
