@@ -6,39 +6,45 @@
 #include <filesystem>
 #include <iostream>
 
-namespace {
-  std::filesystem::path tests_path = "../tests";
-  std::filesystem::path configs_path = "../configs";
-}// namespace
-
 int main(int argc, char* argv[]) {
   if (argc != 5) {
     std::cerr << "Usage: " << argv[0]
               << " <input_file> <output_file> <tape_size> <memory_limit>" << std::endl;
     return 1;
   }
-
   std::filesystem::path input_file = argv[1];
   std::filesystem::path output_file = argv[2];
   size_t tape_size = std::stoul(argv[3]);
   size_t memory_limit = std::stoul(argv[4]);
+
   {
+#ifdef CONFIGS_PATH
     auto workload = std::make_shared<SleepingWorkload>(
-        load_sleeping_workload_spec(configs_path / "workloads.yaml"));
+        load_sleeping_workload_spec(std::filesystem::path(CONFIGS_PATH) / "workloads.yaml"));
+#else
+    auto workload = std::make_shared<SleepingWorkload>(SleepingWorkloadSpec{});
+#endif
+
+#ifdef TMP_PATH
+    auto tmp_path = std::filesystem::path(TMP_PATH);
 
     auto input_tape =
         std::make_unique<FileBasedTape>(input_file, tape_size, workload);
     auto output_tape =
         std::make_unique<FileBasedTape>(output_file, tape_size, workload);
     std::array<std::unique_ptr<Tape>, 2> extra_tapes = {
-        std::make_unique<FileBasedTape>(tests_path / "tmp/1.txt", tape_size, workload),
-        std::make_unique<FileBasedTape>(tests_path / "tmp/2.txt", tape_size, workload),
+        std::make_unique<FileBasedTape>(tmp_path / "1.txt", tape_size, workload),
+        std::make_unique<FileBasedTape>(tmp_path / "2.txt", tape_size, workload),
     };
     auto spec = MemoryLimitSpec(memory_limit);
 
     MergeSortAlgorithm(
         std::move(input_tape), std::move(output_tape), extra_tapes, spec)
         .run();
+#else
+    std::cerr << "Temp directory path is not provided!" << std::endl;
+    return 1;
+#endif
   }
   {
     auto output_tape =
