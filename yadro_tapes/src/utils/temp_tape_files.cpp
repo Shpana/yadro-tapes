@@ -1,5 +1,7 @@
 #include "temp_tape_files.hpp"
 
+#include <filesystem>
+
 namespace {
 #ifdef TMP_PATH
   std::filesystem::path tmp_path(TMP_PATH);
@@ -7,6 +9,7 @@ namespace {
 }// namespace
 
 void create_empty_file(const std::filesystem::path& filepath) {
+  std::filesystem::create_directories(tmp_path);
   std::fstream file;
   file.open(filepath, std::ios::out | std::ios::trunc);
   file.close();
