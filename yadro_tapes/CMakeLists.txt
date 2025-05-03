@@ -14,13 +14,26 @@ add_library(yadro_tapes_lib src/tapes/tape.hpp
         src/algorithms/bubble_sort_algorithm.hpp
         src/algorithms/merge_sort_algorithm.hpp
         src/utils/configs.hpp
+        src/utils/temp_tape_files.hpp
+        src/utils/temp_tape_files.cpp
 )
-target_include_directories(yadro_tapes_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
-target_link_libraries(yadro_tapes_lib PUBLIC yaml-cpp::yaml-cpp)
+target_include_directories(yadro_tapes_lib
+        PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+target_link_libraries(yadro_tapes_lib
+        PUBLIC yaml-cpp::yaml-cpp
+)
+target_compile_definitions(yadro_tapes_lib
+        PRIVATE TMP_PATH="${CMAKE_SOURCE_DIR}/tmp"
+)
 
 add_executable(yadro_tapes main.cpp)
-target_include_directories(yadro_tapes PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
-target_link_libraries(yadro_tapes PUBLIC yadro_tapes_lib)
-target_compile_definitions(yadro_tapes PRIVATE
-        CONFIGS_PATH="${CMAKE_CURRENT_SOURCE_DIR}/configs"
-        TMP_PATH="${CMAKE_SOURCE_DIR}/tmp")
+target_include_directories(yadro_tapes
+        PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+target_link_libraries(yadro_tapes
+        PUBLIC yadro_tapes_lib
+)
+target_compile_definitions(yadro_tapes
+        PRIVATE CONFIGS_PATH="${CMAKE_CURRENT_SOURCE_DIR}/configs"
+)

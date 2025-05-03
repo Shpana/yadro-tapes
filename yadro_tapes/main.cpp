@@ -2,6 +2,7 @@
 #include "tapes/file_based_tape.hpp"
 #include "tapes/workloads/sleeping_workload.hpp"
 #include "utils/configs.hpp"
+#include "utils/temp_tape_files.hpp"
 
 #include <filesystem>
 #include <iostream>
@@ -25,26 +26,19 @@ int main(int argc, char* argv[]) {
     auto workload = std::make_shared<SleepingWorkload>(SleepingWorkloadSpec{});
 #endif
 
-#ifdef TMP_PATH
-    auto tmp_path = std::filesystem::path(TMP_PATH);
-
     auto input_tape =
         std::make_unique<FileBasedTape>(input_file, tape_size, workload);
     auto output_tape =
         std::make_unique<FileBasedTape>(output_file, tape_size, workload);
     std::array<std::unique_ptr<Tape>, 2> extra_tapes = {
-        std::make_unique<FileBasedTape>(tmp_path / "1.txt", tape_size, workload),
-        std::make_unique<FileBasedTape>(tmp_path / "2.txt", tape_size, workload),
+        create_temp_tape("1.dat", tape_size, workload),
+        create_temp_tape("2.dat", tape_size, workload),
     };
     auto spec = MemoryLimitSpec(memory_limit);
 
     MergeSortAlgorithm(
         std::move(input_tape), std::move(output_tape), extra_tapes, spec)
         .run();
-#else
-    std::cerr << "Temp directory path is not provided!" << std::endl;
-    return 1;
-#endif
   }
   {
     auto output_tape =

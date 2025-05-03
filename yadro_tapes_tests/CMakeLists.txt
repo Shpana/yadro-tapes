@@ -5,15 +5,28 @@ FetchContent_Declare(gtest
 )
 FetchContent_MakeAvailable(gtest)
 
-add_library(run_tests_lib src/utils/tapes.cpp
-        src/utils/tapes.hpp)
-target_include_directories(run_tests_lib PUBLIC ${CMAKE_SOURCE_DIR}/yadro_tapes)
-target_link_libraries(run_tests_lib PUBLIC yadro_tapes_lib)
-target_compile_definitions(run_tests_lib PRIVATE STATIC_FILES_PATH="${CMAKE_CURRENT_SOURCE_DIR}/static")
+add_library(run_tests_lib src/utils/static_tape_files.cpp
+        src/utils/static_tape_files.hpp)
+target_include_directories(run_tests_lib
+        PUBLIC ${CMAKE_SOURCE_DIR}/yadro_tapes
+)
+target_link_libraries(run_tests_lib
+        PUBLIC yadro_tapes_lib
+)
+target_compile_definitions(run_tests_lib
+        PRIVATE STATIC_FILES_PATH="${CMAKE_CURRENT_SOURCE_DIR}/static"
+        PRIVATE TMP_PATH="${CMAKE_SOURCE_DIR}/tmp"
+)
 
-add_executable(run_tests src/file_based_tape_tests.cpp)
+add_executable(run_tests
+        src/file_based_tape_tests.cpp
+        src/sorting_tests.cpp
+)
 target_include_directories(run_tests
         PUBLIC ${CMAKE_SOURCE_DIR}/yadro_tapes
-        PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
-target_link_libraries(run_tests PUBLIC run_tests_lib)
-target_link_libraries(run_tests PUBLIC GTest::gtest_main)
+        PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+target_link_libraries(run_tests
+        PUBLIC run_tests_lib
+        PUBLIC GTest::gtest_main
+)
