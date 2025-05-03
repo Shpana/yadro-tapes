@@ -2,6 +2,7 @@
 #define YADRO_TAPES_TAPE_HPP
 
 #include <cstdint>
+#include <cstddef>
 
 class Tape {
 public:
