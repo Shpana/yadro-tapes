@@ -8,7 +8,7 @@ The `FileBasedTape` class was inherited from it, a device that emulates operatio
 To implement the delay during operations (read/write/head movement), 
 the `Workload` interface was introduced and the `SleepingWorkload` class was inherited. 
 Delays for `SleepingWorkload` are configured via a yaml configuration file 
-(the [yaml-cpp](https://github.com/jbeder/yaml-cpp) library is loaded to work with yaml files).
+(the [yaml-cpp](https://github.com/jbeder/yaml-cpp) library is loaded to work with yaml files), delays represented as count of milliseconds.
 
 The `Algorithm` interface was introduced to interact with sorting algorithms. 
 Based on it, two sorting algorithms were implemented: `BubbleSortAlgorithm` and `MergeSortAlgorithm`.
