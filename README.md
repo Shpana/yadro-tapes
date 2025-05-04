@@ -37,6 +37,9 @@ The `run_tests` target can be launched without additional parameters
 run_tests
 ```
 
+By default, `yadro-tapes/tmp` is used as the directory for temporary files, 
+but this can be configured in the root cmake file by changing the `TMP_PATH` variable.
+
 > [!NOTE]
 > The project was built on Ubuntu (using make) and on Windows (using the built-in tools of CLion, which, apparently, 
 > uses ninja under the hood). 
