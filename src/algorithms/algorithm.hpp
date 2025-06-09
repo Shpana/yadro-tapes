@@ -1,7 +1,7 @@
 #ifndef YADRO_TAPES_ALGORITHM_HPP
 #define YADRO_TAPES_ALGORITHM_HPP
 
-#include "../tapes/tape.hpp"
+#include "tapes/tape.hpp"
 
 #include <array>
 

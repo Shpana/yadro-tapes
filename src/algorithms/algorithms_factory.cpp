@@ -1,9 +1,8 @@
 #include "algorithms_factory.hpp"
 
-#include "../tapes/tapes_factory.hpp"
-#include "../tapes/workloads/delaying_workload.hpp"
-
-#include "../utils/configs.hpp"
+#include "tapes/tapes_factory.hpp"
+#include "tapes/workloads/delaying_workload.hpp"
+#include "utils/configs.hpp"
 
 auto CreateBubbleSortAlgorithm(
     std::filesystem::path&& input_filepath,
