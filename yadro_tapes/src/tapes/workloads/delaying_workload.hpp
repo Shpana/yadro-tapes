@@ -23,9 +23,7 @@ public:
   auto TriggerMovement() -> void override { Delay(spec_.moving_delay); }
 
 private:
-  auto Delay(std::chrono::milliseconds ms) -> void {
-    std::this_thread::sleep_for(ms);
-  }
+  auto Delay(std::chrono::milliseconds ms) -> void { std::this_thread::sleep_for(ms); }
 
 private:
   Spec spec_{};

@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 
-#include "utils/temp_tape_files.hpp"
+#include "tapes/tapes_factory.hpp"
 
 #include "utils/static_tape_files.hpp"
 

@@ -8,17 +8,15 @@ class Algorithm {
   using ExtraTapes = std::array<TapePtr, extra_tapes_count>;
 
 public:
-  Algorithm(TapePtr&& input, TapePtr&& output, const ExtraTapes& extra = {},
-            const TSpec& spec = {})
-      : input_(std::move(input)), output_(std::move(output)), extra_(extra),
-        spec_(spec) {}
+  Algorithm(TapePtr&& input, TapePtr&& output,
+            ExtraTapes&& extra = {}, const TSpec& spec = {})
+      : input_(std::move(input)), output_(std::move(output)), extra_(std::move(extra)), spec_(spec) {}
   virtual ~Algorithm() = default;
   virtual auto Run() -> void = 0;
 
 protected:
-  TapePtr input_;
-  TapePtr output_;
-  const ExtraTapes& extra_;
+  TapePtr input_, output_;
+  ExtraTapes extra_;
   const TSpec& spec_;
 };
 

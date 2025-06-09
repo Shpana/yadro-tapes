@@ -3,7 +3,7 @@
 #include "algorithms/bubble_sort_algorithm.hpp"
 #include "algorithms/merge_sort_algorithm.hpp"
 #include "tapes/tape_extends.hpp"
-#include "utils/temp_tape_files.hpp"
+#include "tapes/tapes_factory.hpp"
 
 #include "utils/static_tape_files.hpp"
 
@@ -34,11 +34,12 @@ TEST(sorting_tests, merge_sort) {
     auto output_tape = CreateTempTapeInFile("output.dat", size);
     std::array<std::unique_ptr<Tape>, 2> extra_tapes = {
         CreateTempTapeInFile("1.dat", size),
-        CreateTempTapeInFile("2.dat", size)};
-    auto specs = MemoryLimitSpec(memory_limit);
+        CreateTempTapeInFile("2.dat", size)
+    };
+    auto specs = MemoryLimitSpec{memory_limit};
 
     MergeSortAlgorithm(std::move(input_tape), std::move(output_tape),
-                       extra_tapes, specs)
+                       std::move(extra_tapes), specs)
         .Run();
   }
   {
@@ -63,14 +64,14 @@ TEST(sorting_tests, merge_sort_little) {
     std::array<std::unique_ptr<Tape>, 2> extra_tapes = {
         CreateTempTapeInFile("1.dat", size),
         CreateTempTapeInFile("2.dat", size)};
-    auto specs = MemoryLimitSpec(memory_limit);
+    auto specs = MemoryLimitSpec{memory_limit};
 
     std::vector<Tape::Data> values = {4, 2, 1, 3, 0};
     write_many(input_tape, values);
     reset(input_tape);
 
     MergeSortAlgorithm(std::move(input_tape), std::move(output_tape),
-                       extra_tapes, specs)
+                       std::move(extra_tapes), specs)
         .Run();
   }
   {
