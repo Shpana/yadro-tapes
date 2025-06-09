@@ -5,17 +5,17 @@ FetchContent_Declare(gtest
 )
 FetchContent_MakeAvailable(gtest)
 
-add_executable(run_tests
+add_executable(yadro_tapes_tests
         file_based_tape_tests.cpp
         sorting_tests.cpp
 )
-target_include_directories(run_tests
+target_include_directories(yadro_tapes_tests
         PUBLIC ${CMAKE_SOURCE_DIR}/src
 )
-target_link_libraries(run_tests
+target_link_libraries(yadro_tapes_tests
         PUBLIC yadro_tapes_lib
         PUBLIC GTest::gtest_main
 )
-target_compile_definitions(run_tests
+target_compile_definitions(yadro_tapes_tests
         PRIVATE STATIC_FILES_PATH="${STATIC_FILES_PATH}"
 )

@@ -21,7 +21,7 @@ Small tests have been written for `FileBasedTape`, `BubbleSortAlgorithm`, and `M
 ## Build & Usage 
 
 CMake is used to build the project. 
-The targets we are interested in are `yadro_tapes` and `run_tests`.
+The targets we are interested in are `yadro_tapes` and `yadro_tapes_tests`.
 
 The syntax for using `yadro_tapes` is as follows
 ```shell
@@ -32,9 +32,9 @@ Here, `<input>` and `<output>` are understood as input and output files, respect
 `<memory_limit>` is memory limits (indicated by the letter M in the original condition).
 The data in the tape files is stored in binary form: each cell consists of 4 bytes (it stores a 32-bit integer).
 
-The `run_tests` target can be launched without additional parameters
+The `yadro_tapes_tests` target can be launched without additional parameters
 ```shell
-run_tests
+yadro_tapes_tests
 ```
 
 By default, `yadro-tapes/tmp` is used as the directory for temporary files, 
