@@ -8,30 +8,34 @@ namespace {
 #endif
 }// namespace
 
-void create_empty_file(const std::filesystem::path& filepath) {
+auto CreateEmptyFile(const std::filesystem::path& filepath) -> void {
   std::filesystem::create_directories(tmp_path);
   std::fstream file;
   file.open(filepath, std::ios::out | std::ios::trunc);
   file.close();
 }
 
-std::unique_ptr<FileBasedTape> load_temp_tape(const std::string& filename, size_t size) {
-  return load_temp_tape(filename, size, {});
+auto LoadTempTapeFromFile(const std::string& filename,
+                          size_t size) -> std::unique_ptr<FileBasedTape> {
+  return LoadTempTapeFromFile(filename, size, {});
 }
 
-std::unique_ptr<FileBasedTape> load_temp_tape(
-    const std::string& filename, size_t size, std::shared_ptr<Workload> workload) {
+auto LoadTempTapeFromFile(const std::string& filename, size_t size,
+                          const std::shared_ptr<Workload>& workload)
+    -> std::unique_ptr<FileBasedTape> {
   auto filepath = tmp_path / filename;
   return std::make_unique<FileBasedTape>(filepath, size, workload);
 }
 
-std::unique_ptr<FileBasedTape> create_temp_tape(const std::string& filename, size_t size) {
-  return create_temp_tape(filename, size, {});
+auto CreateTempTapeInFile(const std::string& filename,
+                          size_t size) -> std::unique_ptr<FileBasedTape> {
+  return CreateTempTapeInFile(filename, size, {});
 }
 
-std::unique_ptr<FileBasedTape> create_temp_tape(
-    const std::string& filename, size_t size, std::shared_ptr<Workload> workload) {
+auto CreateTempTapeInFile(const std::string& filename, size_t size,
+                          const std::shared_ptr<Workload>& workload)
+    -> std::unique_ptr<FileBasedTape> {
   auto filepath = tmp_path / filename;
-  create_empty_file(filepath);
+  CreateEmptyFile(filepath);
   return std::make_unique<FileBasedTape>(filepath, size, workload);
 }

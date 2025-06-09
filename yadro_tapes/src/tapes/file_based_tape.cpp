@@ -2,54 +2,53 @@
 
 #include <utility>
 
-FileBasedTape::FileBasedTape(
-    const std::filesystem::path& path, size_t tape_size)
-    : _tape_size(tape_size), _head_position(0) {
-  _tape_file.open(path, std::ios::in | std::ios::out | std::ios::binary);
-  if (!_tape_file.is_open())
+FileBasedTape::FileBasedTape(const std::filesystem::path& path,
+                             size_t tape_size)
+    : tape_size_(tape_size), head_position_(0) {
+  tape_file_.open(path, std::ios::in | std::ios::out | std::ios::binary);
+  if (!tape_file_.is_open())
     throw std::runtime_error("Unable to open tape file!");
 }
 
-FileBasedTape::FileBasedTape(
-    const std::filesystem::path& path, size_t tape_size, std::shared_ptr<Workload> workload)
+FileBasedTape::FileBasedTape(const std::filesystem::path& path,
+                             size_t tape_size,
+                             std::shared_ptr<Workload> workload)
     : FileBasedTape(path, tape_size) {
-  _workload = std::move(workload);
+  workload_ = std::move(workload);
 }
 
-FileBasedTape::~FileBasedTape() {
-  _tape_file.close();
-}
+FileBasedTape::~FileBasedTape() { tape_file_.close(); }
 
-Tape::Data FileBasedTape::read() {
-  if (_head_position > _tape_size)
+auto FileBasedTape::Read() -> Tape::Data {
+  if (head_position_ > tape_size_)
     throw std::out_of_range("Tape out of range!");
   Data value;
-  _tape_file.seekg(
-      static_cast<int64_t>(_head_position * sizeof(Data)), std::ios::beg);
-  _tape_file.read(reinterpret_cast<char*>(&value), sizeof(Data));
-  if (_workload)
-    _workload->trigger_read();
+  tape_file_.seekg(static_cast<int64_t>(head_position_ * sizeof(Data)),
+                   std::ios::beg);
+  tape_file_.read(reinterpret_cast<char*>(&value), sizeof(Data));
+  if (workload_)
+    workload_->TriggerRead();
   return value;
 }
 
-void FileBasedTape::write(Data value) {
-  if (_head_position > _tape_size)
+auto FileBasedTape::Write(Data value) -> void {
+  if (head_position_ > tape_size_)
     throw std::out_of_range("Tape out of range!");
-  _tape_file.seekp(
-      static_cast<int64_t>(_head_position * sizeof(Data)), std::ios::beg);
-  _tape_file.write(reinterpret_cast<char*>(&value), sizeof(Data));
-  if (_workload)
-    _workload->trigger_write();
+  tape_file_.seekp(static_cast<int64_t>(head_position_ * sizeof(Data)),
+                   std::ios::beg);
+  tape_file_.write(reinterpret_cast<char*>(&value), sizeof(Data));
+  if (workload_)
+    workload_->TriggerWrite();
 }
 
-void FileBasedTape::move_forward() {
-  _head_position++;
-  if (_workload)
-    _workload->trigger_movement();
+auto FileBasedTape::MoveForward() -> void {
+  head_position_++;
+  if (workload_)
+    workload_->TriggerMovement();
 }
 
-void FileBasedTape::move_back() {
-  _head_position--;
-  if (_workload)
-    _workload->trigger_movement();
+auto FileBasedTape::MoveBack() -> void {
+  head_position_--;
+  if (workload_)
+    workload_->TriggerMovement();
 }

@@ -5,9 +5,9 @@
 The `Tape` interface was introduced to work with a tape-type device. 
 The `FileBasedTape` class was inherited from it, a device that emulates operation through files.
 
-To implement the delay during operations (read/write/head movement), 
-the `Workload` interface was introduced and the `SleepingWorkload` class was inherited. 
-Delays for `SleepingWorkload` are configured via a yaml configuration file 
+To implement the delay during operations (read/Write/head movement), 
+the `Workload` interface was introduced and the `DelayingWorkload` class was inherited. 
+Delays for `DelayingWorkload` are configured via a yaml configuration file 
 (the [yaml-cpp](https://github.com/jbeder/yaml-cpp) library is loaded to work with yaml files), delays represented as count of milliseconds.
 
 The `Algorithm` interface was introduced to interact with sorting algorithms. 

@@ -14,18 +14,20 @@ public:
                 std::shared_ptr<Workload> workload);
   ~FileBasedTape() override;
 
-  Data read() override;
-  void write(Data value) override;
-  void move_forward() override;
-  void move_back() override;
-  [[nodiscard]] size_t get_size() const override { return _tape_size; }
-  [[nodiscard]] size_t get_head_position() const override { return _head_position; }
+  auto Read() -> Data override;
+  auto Write(Data value) -> void override;
+  auto MoveForward() -> void override;
+  auto MoveBack() -> void override;
+  [[nodiscard]] auto size() const -> size_t override { return tape_size_; }
+  [[nodiscard]] auto head_position() const -> size_t override {
+    return head_position_;
+  }
 
 private:
-  std::fstream _tape_file;
-  size_t _tape_size;
-  size_t _head_position;
-  std::shared_ptr<Workload> _workload;
+  std::fstream tape_file_;
+  size_t tape_size_;
+  size_t head_position_;
+  std::shared_ptr<Workload> workload_;
 };
 
 #endif// YADRO_TAPES_FILE_BASED_TAPE_HPP

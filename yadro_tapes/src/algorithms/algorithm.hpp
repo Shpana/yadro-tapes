@@ -3,22 +3,23 @@
 
 #include "tapes/tape.hpp"
 
-#include <memory>
-
-template<size_t extra_tapes_number, class TSpec>
+template<size_t extra_tapes_count, typename TSpec>
 class Algorithm {
+  using ExtraTapes = std::array<TapePtr, extra_tapes_count>;
+
 public:
-  Algorithm(std::unique_ptr<Tape>&& input_tape, std::unique_ptr<Tape>&& output_tape,
-            const std::array<std::unique_ptr<Tape>, extra_tapes_number>& extra_tapes = {},
+  Algorithm(TapePtr&& input, TapePtr&& output, const ExtraTapes& extra = {},
             const TSpec& spec = {})
-      : _input_tape(std::move(input_tape)), _output_tape(std::move(output_tape)), _extra_tapes(extra_tapes), _spec(spec) {}
-  virtual void run() = 0;
+      : input_(std::move(input)), output_(std::move(output)), extra_(extra),
+        spec_(spec) {}
+  virtual ~Algorithm() = default;
+  virtual auto Run() -> void = 0;
 
 protected:
-  std::unique_ptr<Tape> _input_tape;
-  std::unique_ptr<Tape> _output_tape;
-  const std::array<std::unique_ptr<Tape>, extra_tapes_number>& _extra_tapes;
-  const TSpec& _spec;
+  TapePtr input_;
+  TapePtr output_;
+  const ExtraTapes& extra_;
+  const TSpec& spec_;
 };
 
 #endif// YADRO_TAPES_ALGORITHM_HPP

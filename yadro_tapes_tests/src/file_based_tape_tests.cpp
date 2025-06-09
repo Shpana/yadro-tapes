@@ -17,23 +17,23 @@ TEST(file_based_tape_tests, creation_file_not_found) {
 
 TEST(file_based_tape_tests, reading) {
   auto tape = load_static_tape("reading.dat", 1);
-  ASSERT_EQ(tape->read(), 42);
+  ASSERT_EQ(tape->Read(), 42);
 }
 
 TEST(file_based_tape_tests, writing) {
-  auto tape = create_temp_tape("1.dat", 1);
-  tape->write(24);
-  ASSERT_EQ(tape->read(), 24);
-  tape->write(42);
-  ASSERT_EQ(tape->read(), 42);
+  auto tape = CreateTempTapeInFile("1.dat", 1);
+  tape->Write(24);
+  ASSERT_EQ(tape->Read(), 24);
+  tape->Write(42);
+  ASSERT_EQ(tape->Read(), 42);
 }
 
 TEST(file_based_tape_tests, moving) {
   auto tape = load_static_tape("100_inverse.dat", 100);
-  ASSERT_EQ(tape->read(), 99);
-  tape->move_forward();
-  tape->move_forward();
-  ASSERT_EQ(tape->read(), 97);
-  tape->move_back();
-  ASSERT_EQ(tape->read(), 98);
+  ASSERT_EQ(tape->Read(), 99);
+  tape->MoveForward();
+  tape->MoveForward();
+  ASSERT_EQ(tape->Read(), 97);
+  tape->MoveBack();
+  ASSERT_EQ(tape->Read(), 98);
 }

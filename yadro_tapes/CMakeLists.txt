@@ -9,7 +9,7 @@ add_library(yadro_tapes_lib src/tapes/tape.hpp
         src/tapes/file_based_tape.cpp
         src/tapes/tape_extends.hpp
         src/tapes/workloads/workload.hpp
-        src/tapes/workloads/sleeping_workload.hpp
+        src/tapes/workloads/delaying_workload.hpp
         src/algorithms/algorithm.hpp
         src/algorithms/bubble_sort_algorithm.hpp
         src/algorithms/merge_sort_algorithm.hpp
