@@ -3,7 +3,7 @@
 
 #include "yaml-cpp/yaml.h"
 
-#include "../tapes/workloads/delaying_workload.hpp"
+#include "tapes/workloads/delaying_workload.hpp"
 
 #include <chrono>
 #include <filesystem>
@@ -11,9 +11,9 @@
 auto LoadSleepingWorkloadSpec(const std::filesystem::path& filepath)
     -> DelayingWorkload::Spec {
   auto config = YAML::LoadFile(filepath.string());
-  if (!config["sleeping-workload"])
+  if (!config["delaying-workload"])
     return {};
-  auto workload_config = config["sleeping-workload"];
+  auto workload_config = config["delaying-workload"];
 
   DelayingWorkload::Spec spec{};
   if (workload_config["reading-delay"])

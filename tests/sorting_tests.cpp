@@ -1,8 +1,8 @@
 #include "gtest/gtest.h"
 
+#include "algorithms/algorithms_factory.hpp"
 #include "tapes/tape_extends.hpp"
 #include "tapes/tapes_factory.hpp"
-#include "algorithms/algorithms_factory.hpp"
 
 namespace {
 #ifdef STATIC_FILES_PATH
@@ -43,8 +43,7 @@ TEST(sorting_tests, merge_sort) {
     ASSERT_TRUE(output_tape);
     std::array<std::unique_ptr<Tape>, 2> extra_tapes = {
         CreateTempTapeInFile("1.dat", size),
-        CreateTempTapeInFile("2.dat", size)
-    };
+        CreateTempTapeInFile("2.dat", size)};
 
     CreateMergeSortAlgorithm(
         std::move(input_tape), std::move(output_tape), std::move(extra_tapes), memory_limit)
@@ -70,8 +69,7 @@ TEST(sorting_tests, merge_sort_little) {
     auto output_tape = static_cast<TapePtr>(CreateTempTapeInFile("output.dat", size));
     std::array<std::unique_ptr<Tape>, 2> extra_tapes = {
         CreateTempTapeInFile("1.dat", size),
-        CreateTempTapeInFile("2.dat", size)
-    };
+        CreateTempTapeInFile("2.dat", size)};
 
     std::vector<Tape::Data> values = {4, 2, 1, 3, 0};
     WriteMany(input_tape, values);

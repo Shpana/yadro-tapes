@@ -11,8 +11,7 @@ auto CreateBubbleSortAlgorithm(
     -> std::unique_ptr<BubbleSortAlgorithm> {
 #ifdef CONFIGS_PATH
   auto workload = std::make_shared<DelayingWorkload>(
-      LoadSleepingWorkloadSpec(std::filesystem::path{CONFIGS_PATH} / "workloads.yaml")
-  );
+      LoadSleepingWorkloadSpec(std::filesystem::path{CONFIGS_PATH} / "workloads.yaml"));
 
   auto input_tape = LoadTapeFromFile(input_filepath, size, workload);
   auto output_tape = LoadTapeFromFile(output_filepath, size, workload);
@@ -37,8 +36,7 @@ auto CreateMergeSortAlgorithm(
     -> std::unique_ptr<MergeSortAlgorithm> {
 #ifdef CONFIGS_PATH
   auto workload = std::make_shared<DelayingWorkload>(
-      LoadSleepingWorkloadSpec(std::filesystem::path{CONFIGS_PATH} / "workloads.yaml")
-  );
+      LoadSleepingWorkloadSpec(std::filesystem::path{CONFIGS_PATH} / "workloads.yaml"));
 
   auto input_tape = LoadTapeFromFile(input_filepath, size, workload);
   auto output_tape = LoadTapeFromFile(output_filepath, size, workload);

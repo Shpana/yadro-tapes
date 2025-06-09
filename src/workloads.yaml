@@ -1,4 +1,4 @@
-sleeping-workload:
+delaying-workload:
   reading-delay: 0
   writing-delay: 0
   moving-delay: 0
