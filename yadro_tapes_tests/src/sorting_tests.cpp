@@ -16,7 +16,7 @@ TEST(sorting_tests, bubble_sort) {
   }
   {
     auto tape = LoadTempTapeFromFile("output.dat", size);
-    auto buffer = read_many(std::move(tape), size);
+    auto buffer = ReadMany(std::move(tape), size);
 
     std::vector<Tape::Data> expected_buffer(size, 0);
     for (size_t i = 0; i < size; ++i)
@@ -44,7 +44,7 @@ TEST(sorting_tests, merge_sort) {
   }
   {
     std::unique_ptr<Tape> tape = LoadTempTapeFromFile("output.dat", size);
-    auto buffer = read_many(tape, size);
+    auto buffer = ReadMany(tape, size);
 
     std::vector<Tape::Data> expected_buffer(size, 0);
     for (size_t i = 0; i < size; ++i)
@@ -67,8 +67,8 @@ TEST(sorting_tests, merge_sort_little) {
     auto specs = MemoryLimitSpec{memory_limit};
 
     std::vector<Tape::Data> values = {4, 2, 1, 3, 0};
-    write_many(input_tape, values);
-    reset(input_tape);
+    WriteMany(input_tape, values);
+    Reset(input_tape);
 
     MergeSortAlgorithm(std::move(input_tape), std::move(output_tape),
                        std::move(extra_tapes), specs)
@@ -76,7 +76,7 @@ TEST(sorting_tests, merge_sort_little) {
   }
   {
     std::unique_ptr<Tape> tape = LoadTempTapeFromFile("output.dat", size);
-    auto buffer = read_many(tape, size);
+    auto buffer = ReadMany(tape, size);
     std::vector<Tape::Data> expected_buffer = {0, 1, 2, 3, 4};
     ASSERT_EQ(buffer, expected_buffer);
   }

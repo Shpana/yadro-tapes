@@ -1,6 +1,8 @@
 #include "tape_extends.hpp"
 
-std::vector<Data> read_many(const std::unique_ptr<Tape>& tape, size_t steps) {
+#include <algorithm>
+
+auto ReadMany(const TapePtr& tape, size_t steps) -> std::vector<Data> {
   std::vector<Data> result(static_cast<int>(steps), 0);
   for (size_t i = 0; i < steps; ++i) {
     result[i] = tape->Read();
@@ -9,26 +11,27 @@ std::vector<Data> read_many(const std::unique_ptr<Tape>& tape, size_t steps) {
   return result;
 }
 
-void write_many(const std::unique_ptr<Tape>& tape, const std::vector<Data>& values) {
+auto WriteMany(const TapePtr& tape, const std::vector<Data>& values) -> void {
   for (int value: values) {
     tape->Write(value);
     tape->MoveForward();
   }
 }
 
-void move_forward_many(const std::unique_ptr<Tape>& tape, size_t steps) {
-  for (size_t i = 0; i < steps; ++i) tape->MoveForward();
+auto Reset(const TapePtr& tape) -> void {
+  while (tape->head_position() > 0)
+    tape->MoveBack();
 }
 
-void reset(const std::unique_ptr<Tape>& tape) {
-  while (tape->head_position() > 0) tape->MoveBack();
+auto Sort(const TapePtr& from, const TapePtr& to, size_t block_size) -> void {
+  auto buffer = ReadMany(from, block_size);
+  std::sort(buffer.begin(), buffer.end());
+  WriteMany(to, buffer);
 }
 
-
-
-void copy(const std::unique_ptr<Tape>& from, const std::unique_ptr<Tape>& to) {
-  reset(from);
-  reset(to);
+auto Copy(const TapePtr& from, const TapePtr& to) -> void {
+  Reset(from);
+  Reset(to);
   for (size_t i = 0; i < from->size(); ++i) {
     to->Write(from->Read());
     from->MoveForward();
@@ -36,15 +39,7 @@ void copy(const std::unique_ptr<Tape>& from, const std::unique_ptr<Tape>& to) {
   }
 }
 
-void copy_part(const std::unique_ptr<Tape>& from, const std::unique_ptr<Tape>& to,
-               size_t part_size) {
-  auto buffer = read_many(from, part_size);
-  write_many(to, buffer);
+auto CopyPart(const TapePtr& from, const TapePtr& to, size_t part_size) -> void {
+  auto buffer = ReadMany(from, part_size);
+  WriteMany(to, buffer);
 }
-
-void sort(const std::unique_ptr<Tape>& from, const std::unique_ptr<Tape>& to, size_t block_size) {
-  auto buffer = read_many(from, block_size);
-  std::sort(buffer.begin(), buffer.end());
-  write_many(to, buffer);
-}
-

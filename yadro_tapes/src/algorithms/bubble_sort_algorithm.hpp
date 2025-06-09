@@ -13,10 +13,10 @@ public:
   auto Run() -> void override {
     size_t size = input_->size();
 
-    copy(input_, output_);
+    Copy(input_, output_);
 
     for (size_t i = 0; i < size - 1; ++i) {
-      reset(output_);
+      Reset(output_);
       for (size_t j = 0; j < size - i - 1; ++j) {
         auto u = output_->Read();
         output_->MoveForward();

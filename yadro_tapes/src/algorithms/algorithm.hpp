@@ -3,6 +3,8 @@
 
 #include "tapes/tape.hpp"
 
+#include <array>
+
 template<size_t extra_tapes_count, typename TSpec>
 class Algorithm {
   using ExtraTapes = std::array<TapePtr, extra_tapes_count>;
@@ -15,7 +17,8 @@ public:
   virtual auto Run() -> void = 0;
 
 protected:
-  TapePtr input_, output_;
+  TapePtr input_;
+  TapePtr output_;
   ExtraTapes extra_;
   const TSpec& spec_;
 };

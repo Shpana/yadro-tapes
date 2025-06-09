@@ -20,7 +20,7 @@ public:
     size_t size = input_->size();
 
     if (size <= spec_.memory_limit) {
-      sort(input_, output_, size);
+      Sort(input_, output_, size);
       return;
     }
 
@@ -28,16 +28,16 @@ public:
     size_t remained = size;
     while (remained > 0) {
       size_t block_size = std::min(remained, spec_.memory_limit);
-      sort(input_, extra_[leafs_count % 2], block_size);
+      Sort(input_, extra_[leafs_count % 2], block_size);
       remained -= block_size;
       leafs_count++;
     }
-    reset(extra_);
+    Reset(extra_);
 
     size_t current_block_size = spec_.memory_limit;
     while (leafs_count > 1) {
-      reset(output_);
-      reset(extra_);
+      Reset(output_);
+      Reset(extra_);
 
       remained = size;
       auto segment1 = Segment{0, 0}, segment2 = Segment{0, 0};
@@ -45,7 +45,7 @@ public:
         size_t block_size1 = std::min(remained, current_block_size);
         remained -= block_size1;
         if (remained == 0) {
-          copy_part(extra_[0], output_, block_size1);
+          CopyPart(extra_[0], output_, block_size1);
           break;
         }
         size_t block_size2 = std::min(remained, current_block_size);
@@ -57,15 +57,15 @@ public:
       }
       current_block_size *= 2;
 
-      reset(output_);
-      reset(extra_);
+      Reset(output_);
+      Reset(extra_);
 
       remained = size;
       size_t new_leafs_count = 0;
       while (remained > 0) {
         size_t block_size = std::min(remained, current_block_size);
         remained -= block_size;
-        copy_part(output_, extra_[new_leafs_count % 2], block_size);
+        CopyPart(output_, extra_[new_leafs_count % 2], block_size);
         new_leafs_count++;
       }
     }
