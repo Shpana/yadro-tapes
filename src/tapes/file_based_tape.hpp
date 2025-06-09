@@ -2,7 +2,7 @@
 #define YADRO_TAPES_FILE_BASED_TAPE_HPP
 
 #include "tape.hpp"
-#include "tapes/workloads/workload.hpp"
+#include "workloads/workload.hpp"
 
 #include <filesystem>
 #include <fstream>

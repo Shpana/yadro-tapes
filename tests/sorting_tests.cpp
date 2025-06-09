@@ -1,18 +1,25 @@
 #include "gtest/gtest.h"
 
-#include "algorithms/bubble_sort_algorithm.hpp"
-#include "algorithms/merge_sort_algorithm.hpp"
 #include "tapes/tape_extends.hpp"
 #include "tapes/tapes_factory.hpp"
+#include "algorithms/algorithms_factory.hpp"
 
-#include "utils/static_tape_files.hpp"
+namespace {
+#ifdef STATIC_FILES_PATH
+  std::filesystem::path static_files_path{STATIC_FILES_PATH};
+#else
+  static_assert(false, "STATIC_FILES_PATH is not specified!");
+#endif
+}// namespace
 
 TEST(sorting_tests, bubble_sort) {
   size_t size = 100;
   {
-    auto input_tape = load_static_tape("100_inverse.dat", size);
+    auto input_tape = LoadTapeFromFile(static_files_path / "100_inverse.dat", size);
     auto output_tape = CreateTempTapeInFile("output.dat", size);
-    BubbleSortAlgorithm(std::move(input_tape), std::move(output_tape)).Run();
+
+    CreateBubbleSortAlgorithm(std::move(input_tape), std::move(output_tape))
+        ->Run();
   }
   {
     auto tape = LoadTempTapeFromFile("output.dat", size);
@@ -30,17 +37,18 @@ TEST(sorting_tests, merge_sort) {
   size_t size = 100;
   size_t memory_limit = 6;
   {
-    auto input_tape = load_static_tape("100_inverse.dat", size);
+    auto input_tape = LoadTapeFromFile(static_files_path / "100_inverse.dat", size);
+    ASSERT_TRUE(input_tape);
     auto output_tape = CreateTempTapeInFile("output.dat", size);
+    ASSERT_TRUE(output_tape);
     std::array<std::unique_ptr<Tape>, 2> extra_tapes = {
         CreateTempTapeInFile("1.dat", size),
         CreateTempTapeInFile("2.dat", size)
     };
-    auto specs = MemoryLimitSpec{memory_limit};
 
-    MergeSortAlgorithm(std::move(input_tape), std::move(output_tape),
-                       std::move(extra_tapes), specs)
-        .Run();
+    CreateMergeSortAlgorithm(
+        std::move(input_tape), std::move(output_tape), std::move(extra_tapes), memory_limit)
+        ->Run();
   }
   {
     std::unique_ptr<Tape> tape = LoadTempTapeFromFile("output.dat", size);
@@ -58,21 +66,20 @@ TEST(sorting_tests, merge_sort_little) {
   size_t size = 5;
   size_t memory_limit = 2;
   {
-    std::unique_ptr<Tape> input_tape = CreateTempTapeInFile("input.dat", size);
-    std::unique_ptr<Tape> output_tape =
-        CreateTempTapeInFile("output.dat", size);
+    auto input_tape = static_cast<TapePtr>(CreateTempTapeInFile("input.dat", size));
+    auto output_tape = static_cast<TapePtr>(CreateTempTapeInFile("output.dat", size));
     std::array<std::unique_ptr<Tape>, 2> extra_tapes = {
         CreateTempTapeInFile("1.dat", size),
-        CreateTempTapeInFile("2.dat", size)};
-    auto specs = MemoryLimitSpec{memory_limit};
+        CreateTempTapeInFile("2.dat", size)
+    };
 
     std::vector<Tape::Data> values = {4, 2, 1, 3, 0};
     WriteMany(input_tape, values);
     Reset(input_tape);
 
-    MergeSortAlgorithm(std::move(input_tape), std::move(output_tape),
-                       std::move(extra_tapes), specs)
-        .Run();
+    CreateMergeSortAlgorithm(
+        std::move(input_tape), std::move(output_tape), std::move(extra_tapes), memory_limit)
+        ->Run();
   }
   {
     std::unique_ptr<Tape> tape = LoadTempTapeFromFile("output.dat", size);

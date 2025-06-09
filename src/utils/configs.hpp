@@ -3,7 +3,7 @@
 
 #include "yaml-cpp/yaml.h"
 
-#include "tapes/workloads/delaying_workload.hpp"
+#include "../tapes/workloads/delaying_workload.hpp"
 
 #include <chrono>
 #include <filesystem>
