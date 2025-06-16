@@ -5,9 +5,9 @@ class Workload {
 public:
   virtual ~Workload() = default;
 
-  virtual void trigger_read() = 0;
-  virtual void trigger_write() = 0;
-  virtual void trigger_movement() = 0;
+  virtual auto TriggerRead() -> void = 0;
+  virtual auto TriggerWrite() -> void = 0;
+  virtual auto TriggerMovement() -> void = 0;
 };
 
 #endif// YADRO_TAPES_WORKLOAD_HPP

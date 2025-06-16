@@ -1,45 +1,53 @@
 # yadro-tapes
 
-## Overview
+## Обзор 
+Проект представляет из себя решение тестового задания от компании Yadro.
+В рамках проекта были реализованы алгоритмы сортировки на ленточных устройствах.
+В проекте используются библиотеки [GoogleTest](https://github.com/google/googletest) для тестирования и [yaml-cpp](https://github.com/jbeder/yaml-cpp) для конфигурирования.
 
-The `Tape` interface was introduced to work with a tape-type device. 
-The `FileBasedTape` class was inherited from it, a device that emulates operation through files.
 
-To implement the delay during operations (read/write/head movement), 
-the `Workload` interface was introduced and the `SleepingWorkload` class was inherited. 
-Delays for `SleepingWorkload` are configured via a yaml configuration file 
-(the [yaml-cpp](https://github.com/jbeder/yaml-cpp) library is loaded to work with yaml files), delays represented as count of milliseconds.
+## Обзор архитектуры
 
-The `Algorithm` interface was introduced to interact with sorting algorithms. 
-Based on it, two sorting algorithms were implemented: `BubbleSortAlgorithm` and `MergeSortAlgorithm`.
-`BubbleSortAlgorithm` does not use additional tapes, implements a standard algorithm without using additional memory. 
-`MergeSortAlgorithm` uses two additional tapes to store temporary information.
-A detailed description of the implementation of `MergeSortAlgorithm` can be found in the `docs/merge-sort-details.pdf`.
+### Ленты
+Эмуляция работы с ленточным хранилищем производится с помощью сущности `FileBasedTape` (унаследованной о чистого интерфейса `Tape`), 
+хранящей ленты в виде бинарных файлов.
 
-Small tests have been written for `FileBasedTape`, `BubbleSortAlgorithm`, and `MergeSortAlgorithm` using the [GoogleTest](https://github.com/google/googletest) framework.
+### Нагрузки
+`DelayingWorkload` (производный от чистого интерфейса `Workload`) был введен для симуляции задержек взаимодействия с ленточным хранилищем.
+Сами `Workloads` являются механизмом для расширения логики взаимодействия с лентами. 
 
-## Build & Usage 
+Конфигурирование `DelayingWorload` осуществляется через конфигурационные yaml-файлы. 
+Для работы с форматом yaml используется библиотека [yaml-cpp](https://github.com/jbeder/yaml-cpp).
 
-CMake is used to build the project. 
-The targets we are interested in are `yadro_tapes` and `run_tests`.
+### Алгоритмы
+Проект реализует интерфейс `Algorithm`, на основе которого разработаны два алгоритма сортировки:
+- `BubbleSortAlgorithm`: стандартный алгоритм сортировки пузырьком, использующий константную память и не требующий дополнительных лент.
+- `MergeSortAlgorithm`: более сложный алгоритм, использующий две дополнительные ленты для временного хранения данных. Подробное описание реализации этого алгоритма можно найти в `docs/merge-sort-details.pdf`.
 
-The syntax for using `yadro_tapes` is as follows
+
+## Сборка и запуск 
+
+Для сборки проекта используется CMake. В проекте предусмотрены несколько целей для сборки, включая `yadro_tapes` и `yadro_tapes_tests`.
+
+### Инструкции по сборке
+```shell
+cmake -S . -B cmake-build-release -DCMAKE_BUILD_TYPE=Release
+cd cmake-build-release
+cmake --build . --target yadro_tapes
+cmake --build . --target yadro_tapes_tests
+```
+
+### Использование `yadro_tapes` 
+Синтаксис использования 
 ```shell
 yadro_tapes <input> <output> <size> <memory_limit>
 ```
-Here, `<input>` and `<output>` are understood as input and output files, respectively (**they must exist**); 
-`<size>` is the size of the tapes, respectively, input and output; 
-`<memory_limit>` is memory limits (indicated by the letter M in the original condition).
-The data in the tape files is stored in binary form: each cell consists of 4 bytes (it stores a 32-bit integer).
+где `<input>` и `<output>` пути к входному и выходному файлам, соответствено; 
+`<size>` размер лент; 
+`<memory_limit>` ограничения по памяти (в условиях тестового задания эта велчина обозначена через `M`).
 
-The `run_tests` target can be launched without additional parameters
+### Использование `yadro_tapes_tests`
+Синтаксис использования
 ```shell
-run_tests
+yadro_tapes_tests
 ```
-
-By default, `yadro-tapes/tmp` is used as the directory for temporary files, 
-but this can be configured in the root cmake file by changing the `TMP_PATH` variable.
-
-> [!NOTE]
-> The project was built on Ubuntu (using make) and on Windows (using the built-in tools of CLion, which, apparently, 
-> uses ninja under the hood). 
